@@ -10,7 +10,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
-import helpers.recommender as recommender
+import recommender as recommender
 import pandas as pd
 
 app = Flask(__name__)
