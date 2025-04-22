@@ -10,7 +10,12 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from functools import wraps
-from app.helpers import recommender as recommender
+# for digital ocean 
+# from app.helpers import recommender as recommender
+
+# for local  
+from helpers import recommender as recommender
+
 import pandas as pd
 
 app = Flask(__name__)
