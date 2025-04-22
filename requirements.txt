@@ -171,7 +171,7 @@ jupyterlab-widgets==1.0.0
 keyring==24.3.1
 kiwisolver==1.4.4
 langchain==0.0.350
-langchain-community==0.0.20
+langchain-community==0.2.19
 langchain-core==0.1.23
 langsmith==0.0.87
 lazy_loader==0.4
