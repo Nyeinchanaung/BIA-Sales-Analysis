@@ -108,41 +108,70 @@ def dashboard():
 @login_required
 def recommendtation():
     recommendations = None
+    customer_profile = None
     error = None
+    customer_id = None
+
+    # get the customer list for the dropdown
+    Customer = recommender.GetCustomer()
+    customer_list = Customer.customer_list()
+    
+    if customer_list is not None:
+        customer_list = customer_list.to_dict(orient='records')
+        print(f"Customer list: {customer_list}")
+    else:
+        error = 'Error loading customer list.'
+        customer_list = []
+    if request.method == 'GET':
+        customer_id = 97475543
+         # change cusotmer_id into to integer
 
     if request.method == 'POST':
         customer_id = request.form.get('customer_id')
          # change cusotmer_id into to integer
-        try:
-            customer_id = int(customer_id)
-        except ValueError:
-            error = 'Invalid customer ID. Please enter a valid integer.'
-            customer_id = None
+    try:
+        customer_id = int(customer_id)
+    except ValueError:
+        error = 'Invalid customer ID. Please enter a valid integer.'
+        customer_id = None
 
-        if customer_id:
-            try:
-                # Call the recommender function
-                content_based_recommender = recommender.ContentBasedRecommender(top_n=30)
-                result = content_based_recommender.recommend(customer_id)
-                print(f"Recommendations for customer {customer_id}: {result}")
-                
-                # Convert result to DataFrame if it's a list
-                if isinstance(result, list):
-                    recommendations = pd.DataFrame(result, columns=['product_id', 'product_name'])
-                elif isinstance(result, pd.DataFrame):
-                    recommendations = result
-                else:
-                    error = 'Unexpected recommendation format.'
-                    recommendations = None
-
-                if recommendations is not None and recommendations.empty:
-                    error = 'No recommendations available for this customer.'
-            except Exception as e:
-                error = f'Error generating recommendations: {str(e)}'
+    if customer_id:
+        #Get customer profile
+        customer_profile = Customer.customer_profile(customer_id)
+        if customer_profile is not None:
+            customer_profile = customer_profile.to_dict(orient='records')[0]
+            print(f"Customer profile: {customer_profile}")
         else:
-            error = 'Please provide a valid customer ID.'
+            error = 'Customer profile not found.'
+            customer_profile = None
+        try:
+            # Call the recommender function
+            content_based_recommender = recommender.ContentBasedRecommender(top_n=30)
+            result = content_based_recommender.recommend(customer_id)
+            # print(f"Recommendations for customer {customer_id}: {result}")
+                
+            # Convert result to DataFrame if it's a list
+            if isinstance(result, list):
+                recommendations = pd.DataFrame(result, columns=['product_id', 'product_name','category','brand','price','mrp','margin_percentage'])
+            elif isinstance(result, pd.DataFrame):
+                recommendations = result
+            else:
+                error = 'Unexpected recommendation format.'
+                recommendations = None
 
-    return render_template('recommendations.html', recommendations=recommendations, error=error)
+            if recommendations is not None and recommendations.empty:
+                error = 'No recommendations available for this customer.'
+        except Exception as e:
+            error = f'Error generating recommendations: {str(e)}'
+    else:
+        error = 'Please provide a valid customer ID.'
+
+    return render_template('recommendations.html', 
+                           recommendations=recommendations, 
+                           customer_list=customer_list,
+                           customer_profile=customer_profile,
+                           customer_id=customer_id,
+                           error=error)
 
 
 # Classification route (protected)
@@ -152,25 +181,32 @@ def classification():
     cluster = None
     importance = None
     error = None
+    
+    # Default values for recency_days, frequency, and monetary
+    if request.method == 'GET':
+        
+        recency_days = 20
+        frequency = 5
+        monetary = 100
 
+    # Check if the form is submitted
     if request.method == 'POST':
-        try:
-            recency_days = float(request.form.get('recency_days'))
-            frequency = float(request.form.get('frequency'))
-            monetary = float(request.form.get('monetary'))
-            cluster, importance = predict_cluster(recency_days, frequency, monetary)
-            importance = importance.tolist()  # Convert numpy array to list for template
-        except (ValueError, TypeError) as e:
-            error = f"Invalid input: {str(e)}"
+        recency_days = float(request.form.get('recency_days'))
+        frequency = float(request.form.get('frequency'))
+        monetary = float(request.form.get('monetary'))
+
+    try:
+        cluster, importance = predict_cluster(recency_days, frequency, monetary)
+        importance = importance.tolist()  # Convert numpy array to list for template
+    except (ValueError, TypeError) as e:
+        error = f"Invalid input: {str(e)}"
     return render_template('classification.html', 
                            cluster=cluster, 
                            importance=importance, 
-                           recency_days=recency_days if 'recency_days' in locals() else None,
-                           frequency=frequency if 'frequency' in locals() else None,
-                           monetary=monetary if 'monetary' in locals() else None,
+                           recency_days=recency_days if 'recency_days' in locals() else 20,
+                           frequency=frequency if 'frequency' in locals() else 5,
+                           monetary=monetary if 'monetary' in locals() else 100,
                            error=error)
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

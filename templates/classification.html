@@ -19,7 +19,7 @@
         <div class="row justify-content-center">
             <h1 class="text-center mb-4">Customer Segmentation</h1>
         <!-- Classification Form -->
-            <div class="col-md-6 col-lg-5">
+            <div class="col-md-6 col-lg-6">
                 <form action="/classification" method="POST" class="login-form">
                     <div class="mb-3">
                         <label for="recency_days" class="form-label">Recency (days)</label>
@@ -37,7 +37,7 @@
                 </form>
             </div>
              <!-- Display Results -->
-            <div class="col-md-6 col-lg-5">
+            <div class="col-md-6 col-lg-6">
                 {% if cluster %}
                     <div class="result-card">
                         <h3 class="mb-2">Predicted Cluster</h3>
@@ -70,8 +70,6 @@
     {% endblock %}
     {% block footer %}
         {{ super() }}
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script>

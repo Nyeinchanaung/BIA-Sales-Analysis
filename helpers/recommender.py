@@ -97,7 +97,6 @@ class CollaborativeRecommender2:
         })
         recommendations = recommendations.sort_values('rating', ascending=False)
         return recommendations.head(self.top_n)[['product_id', 'product_name']]
-
 class ContentBasedRecommender:
     def __init__(self, top_n=10):
         self.top_n = top_n
@@ -127,7 +126,7 @@ class ContentBasedRecommender:
         # Compute cosine similarity between customer profile and products
         sims = cosine_similarity(profile_vec, self.product_tfidf).flatten()
         top_indices = sims.argsort()[-self.top_n:][::-1]
-        recommendations = self.df_products_profile.iloc[top_indices][['product_id','product_name']]
+        recommendations = self.df_products_profile.iloc[top_indices][['product_id','product_name','category','brand','price','mrp','margin_percentage']]
         return recommendations
 
 class HybridRecommender1:
@@ -151,3 +150,17 @@ class HybridRecommender2:
         recommendations1 = self.recommender1.recommend(customer_id)
         recommendations2 = self.recommender2.recommend(customer_id)
         return pd.concat([recommendations1, recommendations2], ignore_index=True)
+    
+class GetCustomer:
+    def __init__(self):
+        self.df_customers = df_customers
+        
+    def customer_list(self):
+        return self.df_customers[['customer_id', 'customer_name']].head(100)
+    
+    def customer_profile(self, customer_id):
+        customer_profile = self.df_customers[self.df_customers['customer_id'] == customer_id]
+        if not customer_profile.empty:
+            return customer_profile
+        else:
+            return None
