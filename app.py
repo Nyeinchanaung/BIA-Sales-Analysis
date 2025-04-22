@@ -49,7 +49,9 @@ def predict_cluster(recency_days, frequency, monetary):
     new_data = [[recency_days, frequency, monetary]]
     scaled_data = scaler.transform(new_data)
     predicted_cluster = kmeans.predict(scaled_data)
-    return cluster_definition[predicted_cluster[0]]
+    cluster_center = kmeans.cluster_centers_[predicted_cluster]
+    importance = scaled_data[0] - cluster_center
+    return cluster_definition[predicted_cluster[0]], importance[0]
 
 # Decorator to check if user is logged in
 def login_required(f):
@@ -98,7 +100,8 @@ def index():
 def dashboard():
     # Power BI embed URL (replace with your own)
     #powerbi_url = "https://app.powerbi.com/reportEmbed?reportId=2abedde2-07e3-483a-aa60-792f2043f31f&autoAuth=true&ctid=99eeb009-e7a2-47b6-9ded-028cdcc300e6"
-    powerbi_url = "https://app.powerbi.com/view?r=eyJrIjoiZWUyOWRiMTMtNzFhOS00NWY1LTgyNzUtNWRiNzg3YTUzYjIxIiwidCI6Ijk5ZWViMDA5LWU3YTItNDdiNi05ZGVkLTAyOGNkY2MzMDBlNiIsImMiOjEwfQ%3D%3D&pageName=894da8eb5dacfce1aaf4"
+    # powerbi_url = "https://app.powerbi.com/view?r=eyJrIjoiZWUyOWRiMTMtNzFhOS00NWY1LTgyNzUtNWRiNzg3YTUzYjIxIiwidCI6Ijk5ZWViMDA5LWU3YTItNDdiNi05ZGVkLTAyOGNkY2MzMDBlNiIsImMiOjEwfQ%3D%3D&pageName=894da8eb5dacfce1aaf4"
+    powerbi_url = "https://app.powerbi.com/view?r=eyJrIjoiZWUyOWRiMTMtNzFhOS00NWY1LTgyNzUtNWRiNzg3YTUzYjIxIiwidCI6Ijk5ZWViMDA5LWU3YTItNDdiNi05ZGVkLTAyOGNkY2MzMDBlNiIsImMiOjEwfQ%3D%3D"
     return render_template("dashboard.html", powerbi_url=powerbi_url)
 
 @app.route('/recommender', methods=['GET', 'POST'])
@@ -147,6 +150,7 @@ def recommendtation():
 @login_required
 def classification():
     cluster = None
+    importance = None
     error = None
 
     if request.method == 'POST':
@@ -154,11 +158,17 @@ def classification():
             recency_days = float(request.form.get('recency_days'))
             frequency = float(request.form.get('frequency'))
             monetary = float(request.form.get('monetary'))
-            cluster = predict_cluster(recency_days, frequency, monetary)
+            cluster, importance = predict_cluster(recency_days, frequency, monetary)
+            importance = importance.tolist()  # Convert numpy array to list for template
         except (ValueError, TypeError) as e:
             error = f"Invalid input: {str(e)}"
-    
-    return render_template('classification.html', cluster=cluster, error=error)
+    return render_template('classification.html', 
+                           cluster=cluster, 
+                           importance=importance, 
+                           recency_days=recency_days if 'recency_days' in locals() else None,
+                           frequency=frequency if 'frequency' in locals() else None,
+                           monetary=monetary if 'monetary' in locals() else None,
+                           error=error)
 
 
 
