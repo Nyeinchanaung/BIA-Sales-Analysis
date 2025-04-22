@@ -170,7 +170,7 @@ jupyterlab_server==2.27.3
 jupyterlab-widgets==1.0.0
 keyring==24.3.1
 kiwisolver==1.4.4
-langchain==0.0.350
+langchain==0.2.5
 langchain-community==0.0.20
 langchain-core==0.1.23
 langsmith==0.0.87
