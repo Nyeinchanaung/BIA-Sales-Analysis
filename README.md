@@ -7,3 +7,9 @@ This scope of this project encompasses to create and evaluate a specific Busines
 - RFM (Recency, Frequency, Monetary) model for customer segmentation 
 - Machine learning model comparison for product recommendation 
 
+## gunicorn setup
+gunicorn --worker-tmp-dir /dev/shm --config gunicorn_config.py app:app:app
+gunicorn --worker-tmp-dir /dev/shm --config gunicorn_config.py app:app:app
+
+gunicorn --worker-tmp-dir /dev/shm --workers 2 app.app:app
+

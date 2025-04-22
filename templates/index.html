@@ -90,6 +90,17 @@
             background-color: #ffca2c;
             border-color: #ffca2c;
         }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .cover-img {
+            max-width: 75%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -103,19 +114,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Home</a>
+                        <a class="nav-link text-white" href="/">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/recommender">recommender</a>
+                        <a class="nav-link text-white" href="/recommender">Recommender</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/classification">Classification</a>
                     </li>
                 </ul>
-                <button class="btn signup-btn text-black px-4 py-2 rounded-pill ms-auto">Sign Up</button>
+                {% if 'logged_in' in session %}
+                    <a href="/logout" class="btn signup-btn text-black px-4 py-2 rounded-pill ms-auto">Logout</a>
+                {% else %}
+                    <a href="/" class="btn signup-btn text-black px-4 py-2 rounded-pill ms-auto">Sign Up</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -124,23 +139,19 @@
     <main class="container-lg px-4 py-5">
         <div class="row align-items-start">
             <p class="text-uppercase small fw-medium">Food Delivery Service & Restaurant</p>
-                <h1 class="display-4 fw-bold mb-4">Get Fresh <span class="text-warning">Grocery</span><br>Enjoy Healthy</h1>
+            <h1 class="display-4 fw-bold mb-4">Get Fresh <span class="text-warning">Grocery</span><br>Enjoy Healthy</h1>
             <!-- Left Side (Title, Subtitle, and Cover Image) -->
             <div class="col-md-8 mb-4 mb-md-0">
-                
                 <!-- Cover Image -->
                 <div class="position-relative">
-                    <img src="{{url_for('static', filename='dashboard.png')}}" alt="Grocery Cover" class="img-fluid rounded mx-auto d-block">
-                    <!-- <div class="position-absolute top-0 end-0 bg-white bg-opacity-25 p-2 rounded text-sm">
-                        <p>100% Fresh Quality</p>
-                    </div> -->
+                    <img src="{{ url_for('static', filename='dashboard.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
                 </div>
                 <!-- Customer Reviews -->
                 <div class="d-flex align-items-center mt-4">
                     <div class="d-flex">
-                        <img src="{{url_for('static', filename='avatar-1.png')}}" alt="Customer 1" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
-                        <img src="{{url_for('static', filename='avatar-2.png')}}" alt="Customer 2" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
-                        <img src="{{url_for('static', filename='avatar-3.png')}}" alt="Customer 3" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
+                        <img src="{{ url_for('static', filename='avatar-1.png') }}" alt="Customer 1" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
+                        <img src="{{ url_for('static', filename='avatar-2.png') }}" alt="Customer 2" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
+                        <img src="{{ url_for('static', filename='avatar-3.png') }}" alt="Customer 3" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-left: -10px;">
                     </div>
                     <div class="ms-3">
                         <p class="fw-medium mb-0">Our Happy Customer</p>
@@ -151,18 +162,35 @@
 
             <!-- Right Side (Login Form) -->
             <div class="col-md-4">
+                
                 <!-- Enhanced Login Form -->
-                <div class="login-form p-4">
-                    <input type="email" placeholder="Email" class="login-input form-control mb-3 bg-success bg-opacity-25 border-success text-white">
-                    <input type="password" placeholder="Password" class="login-input form-control mb-3 bg-success bg-opacity-25 border-success text-white">
-                    <button class="login-btn btn btn-warning w-100 mb-3 fw-medium">Login</button>
-                    <!-- <p class="text-center small">Not Yet Member? <a href="#" class="text-warning text-decoration-underline">Sign Up Now</a></p> -->
-                </div>
+                <form action="/login" method="POST" class="login-form p-4">
+                    <h1 class="text-center mb-4">Login</h1>
+                    <p class="text-center mb-4">Welcome back! Please enter your credentials to access your account.</p>
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <div class="mb-3">
+                        <input type="username" name="username" placeholder="Email" class="login-input form-control mb-3 bg-success bg-opacity-25 border-success text-white" required>
+                        <input type="password" name="password" placeholder="Password" class="login-input form-control mb-3 bg-success bg-opacity-25 border-success text-white" required>
+                        <button type="submit" class="login-btn btn btn-warning w-100 mb-3 fw-medium">Login</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>
-
-    <!-- Bootstrap 5 JS (for navbar toggle functionality) -->
+    <footer>
+        <p>&copy; 2025 BIA Class. All rights reserved.</p>
+    </footer>
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

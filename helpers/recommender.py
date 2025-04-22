@@ -4,12 +4,17 @@ from surprise import Dataset, Reader, SVD
 from surprise.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import os
 
-df_customer_feedback = pd.read_csv('dataset/blinkit_customer_feedback.csv')
-df_customers = pd.read_csv('dataset/blinkit_customers.csv')
-df_products = pd.read_csv('dataset/blinkit_products.csv')
-df_orders = pd.read_csv('dataset/blinkit_orders.csv')
-df_order_items = pd.read_csv('dataset/blinkit_order_items.csv')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# print(f"BASE_DIR: {BASE_DIR}")  # Debugging line
+
+df_customer_feedback = pd.read_csv(f'{BASE_DIR}/dataset/blinkit_customer_feedback.csv')
+
+df_customers = pd.read_csv(f'{BASE_DIR}/dataset/blinkit_customers.csv')
+df_products = pd.read_csv(f'{BASE_DIR}/dataset/blinkit_products.csv')
+df_orders = pd.read_csv(f'{BASE_DIR}/dataset/blinkit_orders.csv')
+df_order_items = pd.read_csv(f'{BASE_DIR}/dataset/blinkit_order_items.csv')
 
 df_orders['order_date'] = pd.to_datetime(df_orders['order_date'])
 
