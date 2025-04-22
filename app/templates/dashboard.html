@@ -112,10 +112,10 @@
                         <a class="nav-link text-white" href="/recommender">Recommender</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/classification">Classification</a>
+                        <a class="nav-link text-white" href="/segmentation">Segmentation</a>
                     </li>
                 </ul>
-                <button class="btn signup-btn text-black px-4 py-2 rounded-pill ms-auto">Log Out</button>
+                <a href="/logout" class="btn signup-btn text-black px-4 py-2 rounded-pill ms-auto">Log Out</a>
             </div>
         </div>
     </nav>
@@ -123,6 +123,16 @@
     <!-- Main Section -->
     <main class="container-lg px-4 py-5">
         <div class="row align-items-start">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
             <div class="col-md-12 text-center">
                 <h1 class="text-center">Business Intelligence & Analytics Dashboard</h1>
                 <p class="text-center">This dashboard is powered by <strong>Microsoft Power BI</strong> and embedded in a Flask app.</p>
