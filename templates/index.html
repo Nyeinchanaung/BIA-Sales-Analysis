@@ -29,11 +29,17 @@
 
             <!-- Right Side (Login Form) -->
             <div class="col-md-4">
-                
+                {% if session['logged_in']  %}
+                    <div class="result-card" role="alert">
+                        <h4 class="alert-heading">Welcome <span class="fst-italic">{{ session['name']}}!</span></h4>
+                        <p>You are logged in. Explore your dashboard.</p>
+                        <a href="/dashboard" class="btn btn-warning">Go to Dashboard</a>
+                    </div>
+                {% else %}
                 <!-- Enhanced Login Form -->
                 <form action="/login" method="POST" class="login-form p-4">
                     <h1 class="text-center mb-4">Login</h1>
-                    <p class="text-center mb-4">Welcome back! Please enter your credentials to access your account.</p>
+                    <p class="text-center mb-4">Please enter your credentials to access your account.</p>
                     <!-- Flash Messages -->
                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
@@ -51,6 +57,7 @@
                         <button type="submit" class="login-btn btn btn-warning w-100 mb-3 fw-medium">Login</button>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
 {% endblock %}

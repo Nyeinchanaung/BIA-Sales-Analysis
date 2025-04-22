@@ -41,9 +41,17 @@
                 <div class="result-card">
                     <div class="row justify-content-start">
                         <div class="col-4 text-end">
+                            <span class="text-right">Type :</span>
+                        </div>
+                        <div class="col-4 text-start">
+                            <span class="text-warning">{{ customer_profile.customer_segment }}</span>  
+                        </div>
+                    </div> 
+                    <div class="row justify-content-start">
+                        <div class="col-4 text-end">
                             <span class="text-end">Name :</span>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 text-start">
                             <span class="text-start">{{ customer_profile.customer_name }}</span>
                         </div>
                     </div>
@@ -51,23 +59,15 @@
                         <div class="col-4 text-end">
                             <span class="text-end"> Email : </span>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 text-start">
                             <span class="text-start">{{ customer_profile.email }}</span>  
                         </div>
                     </div> 
-                    <div class="row justify-content-start">
-                        <div class="col-4 text-end">
-                            <span class="text-right">Customer Segment : </span>
-                        </div>
-                        <div class="col-4">
-                            <span class="text-start">{{ customer_profile.customer_segment }}</span>  
-                        </div>
-                    </div> 
-                    <div class="row justify-content-start">
+                    <div class="row justify-content- start">
                         <div class="col-4 text-end">
                             <span class="text-end">Address :</span>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 text-start">
                             <span class="text-start"> {{ customer_profile.address }}</span>  
                         </div>
                     </div>  

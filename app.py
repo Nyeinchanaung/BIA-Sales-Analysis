@@ -74,6 +74,9 @@ def login():
         
         if username == STATIC_USERNAME and password == STATIC_PASSWORD:
             session['logged_in'] = True
+            session['user_id'] = 1
+            session['name'] = "Admin John Doe"
+            session['email'] = "admin@ait.ac.th"
             flash('Login successful!', 'success')
             print("Login successful")  # Debugging line
             return redirect(url_for('dashboard'))
@@ -88,6 +91,9 @@ def login():
 @login_required
 def logout():
     session.pop('logged_in', None)
+    session.pop('user_id', None)
+    session.pop('name', None)
+    session.pop('email', None)
     flash('You have been logged out.', 'success')
     return redirect(url_for('login'))
 
