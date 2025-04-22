@@ -95,6 +95,12 @@
             padding: 1rem;
             background: rgba(0, 0, 0, 0.2);
         }
+        .cover-img {
+            max-width: 75%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -138,7 +144,7 @@
             <div class="col-md-8 mb-4 mb-md-0">
                 <!-- Cover Image -->
                 <div class="position-relative">
-                    <img src="{{ url_for('static', filename='dashboard.png') }}" alt="Grocery Cover" class="img-fluid rounded mx-auto d-block">
+                    <img src="{{ url_for('static', filename='dashboard.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
                 </div>
                 <!-- Customer Reviews -->
                 <div class="d-flex align-items-center mt-4">

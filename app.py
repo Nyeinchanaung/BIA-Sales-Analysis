@@ -90,7 +90,6 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route("/")
-@login_required
 def index():
     return render_template("index.html")
 
@@ -98,7 +97,8 @@ def index():
 @login_required
 def dashboard():
     # Power BI embed URL (replace with your own)
-    powerbi_url = "https://app.powerbi.com/reportEmbed?reportId=2abedde2-07e3-483a-aa60-792f2043f31f&autoAuth=true&ctid=99eeb009-e7a2-47b6-9ded-028cdcc300e6"
+    #powerbi_url = "https://app.powerbi.com/reportEmbed?reportId=2abedde2-07e3-483a-aa60-792f2043f31f&autoAuth=true&ctid=99eeb009-e7a2-47b6-9ded-028cdcc300e6"
+    powerbi_url = "https://app.powerbi.com/view?r=eyJrIjoiZWUyOWRiMTMtNzFhOS00NWY1LTgyNzUtNWRiNzg3YTUzYjIxIiwidCI6Ijk5ZWViMDA5LWU3YTItNDdiNi05ZGVkLTAyOGNkY2MzMDBlNiIsImMiOjEwfQ%3D%3D&pageName=894da8eb5dacfce1aaf4"
     return render_template("dashboard.html", powerbi_url=powerbi_url)
 
 @app.route('/recommender', methods=['GET', 'POST'])
