@@ -15,8 +15,13 @@ from functools import wraps
 
 # for local  
 from helpers import recommender as recommender
-
 import pandas as pd
+import os
+import joblib
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = 'biadashboard'  # Replace with a secure random key in production
@@ -24,6 +29,27 @@ app.secret_key = 'biadashboard'  # Replace with a secure random key in productio
 # Static credentials
 STATIC_USERNAME = 'admin@ait.ac.th'
 STATIC_PASSWORD = 'password123'
+
+# Load KMeans model and scaler
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # app/ directory
+MODEL_PATH = os.path.join(BASE_DIR, 'models', 'kmeans_with_scaler.pkl')
+
+try:
+    saved_objects = joblib.load(MODEL_PATH)
+    kmeans = saved_objects['model']
+    scaler = saved_objects['scaler']
+    logger.info(f"Successfully loaded model from {MODEL_PATH}")
+except FileNotFoundError as e:
+    logger.error(f"Failed to load model: {e}")
+    raise
+
+cluster_definition = {0: 'Regular', 1: 'Inactive', 2: 'Premium', 3: 'New'}
+
+def predict_cluster(recency_days, frequency, monetary):
+    new_data = [[recency_days, frequency, monetary]]
+    scaled_data = scaler.transform(new_data)
+    predicted_cluster = kmeans.predict(scaled_data)
+    return cluster_definition[predicted_cluster[0]]
 
 # Decorator to check if user is logged in
 def login_required(f):
@@ -116,10 +142,25 @@ def recommendtation():
     return render_template('recommendations.html', recommendations=recommendations, error=error)
 
 
-@app.route('/segmentation', methods=['GET', 'POST'])
+# Classification route (protected)
+@app.route('/classification', methods=['GET', 'POST'])
 @login_required
-def segmentation():
-    return render_template("index.html")
+def classification():
+    cluster = None
+    error = None
+
+    if request.method == 'POST':
+        try:
+            recency_days = float(request.form.get('recency_days'))
+            frequency = float(request.form.get('frequency'))
+            monetary = float(request.form.get('monetary'))
+            cluster = predict_cluster(recency_days, frequency, monetary)
+        except (ValueError, TypeError) as e:
+            error = f"Invalid input: {str(e)}"
+    
+    return render_template('classification.html', cluster=cluster, error=error)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
