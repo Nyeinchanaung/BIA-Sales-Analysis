@@ -152,7 +152,7 @@ def recommendtation():
             customer_profile = None
         try:
             # Call the recommender function
-            content_based_recommender = recommender.ContentBasedRecommender(top_n=30)
+            content_based_recommender = recommender.ContentBasedRecommender(top_n=15)
             result = content_based_recommender.recommend(customer_id)
             # print(f"Recommendations for customer {customer_id}: {result}")
                 

@@ -88,8 +88,8 @@
                     <div class="card-header">
                         <h2 class="text-center">Recommendation Result</h2>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-success">
+                    <div class="card-body table-responsive">
+                        <table class="table table-success ">
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">Product ID</th>
@@ -126,4 +126,32 @@
                 </div>
             </div>
         {% endif %}
+        <br>
+        <div class="row justify-content-center">
+                <div class="result-card">
+                    <h3 class="mb-4 text-warning">The operational mechanism</h1>
+                    <p class="lead text-info">Product Recommendation</p>
+                    <h4 class="mb-2"></h4>
+                    <p>
+                        To evaluate the performance of recommender systems, the primary metric utilized is the conversion rate, which measures the proportion of recommendations that successfully translate into orders or sales. For effective analysis, it's important to split the order data for the test set, which should consist of 10 percent of the total orders, based on the timeline.
+                    </p>
+                    <p>
+                        Specifically, the test set will be comprised of the most recent 500 orders. Within this framework, products need to be recommended to customers in the test set, and it is essential to identify which of these orders includes at least one recommended item. Finally, assessing the number of recommended products that are actually ordered will provide key insights into the effectiveness of the recommendations.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="{{ url_for('static', filename='conversion_count.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
+                            <p class="text-center text-warning">Conversion Count</p>
+                        </div>
+                    </div>
+                    <p>In analyzing the conversion counts, it's clear that CB stands out with the highest numbers, demonstrating its effectiveness in driving results. Following closely behind are hybrids, which also perform well, earning significant spots in both the top 20 and top 25 recommendations. However, when we shift our focus to CF, it becomes apparent that its performance lags behind that of CB, indicating that there are areas for improvement in order to enhance its effectiveness.</p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="{{ url_for('static', filename='conversion_rate_30_product.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
+                            <p class="text-center text-warning">Conversion Rate</p>
+                        </div>
+                    </div>              
+                    <p>In analyzing the performance of various recommendations, it's evident that CB boasts the highest conversion rate among them. Following closely behind are hybrids, which rank just after CB in the top 20 and 25 recommendations. In contrast, CF is falling short compared to CB, indicating a need for improvement in its performance metrics. Notably, when we examine the top 30 recommendations, we see that nearly 15 percent of these are successfully converted into sales, highlighting the effectiveness of certain strategies in driving sales conversions.</p>    
+                </div>
+        </div>
 {% endblock %}

@@ -40,8 +40,8 @@
             <div class="col-md-6 col-lg-6">
                 {% if cluster %}
                     <div class="result-card">
-                        <h3 class="mb-2">Predicted Cluster</h3>
-                        <p class="fs-4 text-warning">{{ cluster }}</p>
+                        <h3 class="text-center mb-2">Predicted Cluster</h3>
+                        <p class="text-center fs-4 text-warning">{{ cluster }}</p>
                         {% if importance %}
                             <h6 class="mt-4 mb-2">Feature Importance Value</h6>
                             <div class="chart-container">
@@ -67,6 +67,33 @@
                 {% endif %}
             </div>
         </div>
+        <!-- End of Classification Form -->
+        <!-- start the operational mechanism -->
+        <br>
+        <div class="row justify-content-center">
+                <div class="result-card">
+                    <h3 class="mb-4 text-warning">The operational mechanism</h1>
+                    <p class="lead text-info">Customer Segmentation</p>
+                    <h4 class="mb-2"></h4>
+                    <p>
+                        The goal of our initiative is to segment customers for targeted marketing and improved product recommendations. We will use rule-based segmentation with RFM scores and machine learning clustering methods like KMeans, Agglomerative clustering, and DBSCAN. This approach aims to identify actionable customer groups that enhance our marketing strategies and boost engagement.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="{{ url_for('static', filename='kmean.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
+                            <p class="text-center text-warning">KMeans Cluster</p>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="{{ url_for('static', filename='rfm.png') }}" alt="Grocery Cover" class="cover-img img-fluid rounded mx-auto d-block img-thumbnail">
+                            <p class="text-center text-warning">RFM Mean Values</p>
+                        </div>
+                    </div>
+                    <p>In our approach to customer segmentation, we classify our customers into four distinct clusters based on their purchasing behavior and spending patterns. The Premium customers are characterized by both high frequency and high monetary value of purchases, which allows us to implement loyalty rewards to keep them engaged. Our Regular customers display a balanced RFM (Recency, Frequency, Monetary) profile, and our strategy here focuses on maintaining their engagement to ensure they continue to shop with us.</p>
+                    <p>The New customers, identified by their recent purchases and moderate spending levels, benefit from onboarding offers designed to enhance their initial experience. Lastly, our Inactive customers, who show low frequency and monetary activity, are targeted through re-engagement campaigns aimed at rekindling their interest in our products. By tailoring our strategies according to these segments, we can optimize customer satisfaction and drive better business outcomes.
+                    </p>    
+                </div>
+        </div>
+                   
     {% endblock %}
     {% block footer %}
         {{ super() }}
